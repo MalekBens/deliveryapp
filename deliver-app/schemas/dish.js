@@ -10,7 +10,7 @@ export default {
       validation: (Rule) => Rule.required(),
      },
      {
-      name: "short_desscription",
+      name: "short_description",
       type:"string",
       title: "Short description",
       validation: (Rule) => Rule.max(200),
@@ -18,7 +18,14 @@ export default {
      {
       name: "image",
       type:"image",
-      title: "Image of the Restaurant",
+      title: "Image of the dish",
+     },
+     
+     {
+      name: "price",
+      type:"number",
+      title: "Price of the dish in TND",
+      validation: (Rule)=>Rule.min(0).required(),
      },
      ],
 

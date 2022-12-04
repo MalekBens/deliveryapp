@@ -11,6 +11,7 @@ module.exports = {
         "theme-white": "#F4F4f8",
         "theme-yellow": "#FDBF50",
         "theme-orange": "#FF724C",
+        "theme-order":"#f33f56",
       },
     },
   },

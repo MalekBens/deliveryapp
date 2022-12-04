@@ -1,7 +1,8 @@
 import { View, Text, Image, TouchableOpacity } from "react-native";
 import React from "react";
 import { MapPinIcon, StarIcon } from "react-native-heroicons/outline";
-
+import { urlFor } from "../sanity";
+import { useNavigation } from "@react-navigation/native";
 const RestaurendCard = ({
   id,
   imgUrl,
@@ -14,11 +15,27 @@ const RestaurendCard = ({
   long,
   lat,
 }) => {
+  const navigation = useNavigation();
   return (
-    <TouchableOpacity className="bg-theme-white mr-3 rounded-lg">
+    <TouchableOpacity 
+    onPress={()=>{
+      navigation.navigate("Restaurant",{
+        id,
+  imgUrl,
+  title,
+  rating,
+  genre,
+  address,
+  short_description,
+  dishes,
+  long,
+  lat,
+      })
+    }}
+    className="bg-theme-white mr-3 rounded-lg w-64">
       <Image
         source={{
-          uri: imgUrl,
+          uri: urlFor(imgUrl).url(),
         }}
         className="h-36 w-64 rounded-lg"
       />
@@ -26,14 +43,14 @@ const RestaurendCard = ({
         <Text className="font-bold text-lg pt-2 text-theme-blue">{title}</Text>
         <View className="flex-row space-x-3 items-center">
           <View className="flex-row space-x-1 items-center">
-            <StarIcon color="#FF724C" size={20} opacity=".5" />
+            <StarIcon color="#FF724C" size={25} opacity=".5" />
             <Text className="text-theme-orange">{rating}</Text>
           </View>
 
           <Text className="text-gray-500 text-xs">{genre}</Text>
         </View>
         <View className="flex-row space-x-2 items-center">
-          <MapPinIcon size={20} opacity=".5" color="#FF724C" />
+          <MapPinIcon size={25} opacity=".5" color="#FF724C" />
           <Text className="text-gray-500 text-xs">Nearby . {address}</Text>
         </View>
       </View>

@@ -1,15 +1,32 @@
 import { View, Text, ScrollView } from "react-native";
-import React from "react";
+import React, { useEffect, useState } from "react";
 import {
   ArrowRightIcon,
   ChevronRightIcon,
 } from "react-native-heroicons/outline";
 import RestaurendCard from "./RestaurendCard";
+import sanityClient from "../sanity";
 
 const FeaturedRow = ({ id, title, description }) => {
+const [featuredRestaurant, setFeatureRestaurant] = useState([])
+// console.log(id);
+
+useEffect(() => {
+  sanityClient.fetch(`*[_type == "featured" && _id ==  $id]{
+    ...,
+    restaurants[] ->{
+    ...,
+      dishes[]-> 
+  },
+  }[0]`,{id}).then((data)=>{
+    setFeatureRestaurant(data?.restaurants);
+  });
+}, [])
+
+
   return (
     <View>
-      <View className="flex-row justify-between mx-4 mt-4">
+      <View className="flex-row justify-between mx-4 mt-4 ">
         <View>
           <Text className="font-bold text-lg text-regal-blue">{title}</Text>
           <Text className="text-xs text-gray-500">{description}</Text>
@@ -25,42 +42,22 @@ const FeaturedRow = ({ id, title, description }) => {
         className="pt-4"
       >
         {/* Restaurent Cards */}
-        <RestaurendCard
-          id={123}
-          imgUrl="https://img.freepik.com/free-photo/top-view-sushi-set-with-soy-sauce-chopsticks-wooden-serving-board_176474-3466.jpg?w=996&t=st=1669291448~exp=1669292048~hmac=00986c6248065fe57b4a2d0184045c3e452167854551009e2edfc085bd4bb017"
-          title="Yo! Sushi"
-          rating={4.5}
-          genre="tunisian"
-          address="123 Main St"
-          short_description="This is a | description"
-          dishes={[]}
-          long={20}
-          lat={0}
+        {featuredRestaurant?.map(restaurant=>(
+          <RestaurendCard
+          key={restaurant._id}
+          id={restaurant._id}
+          imgUrl={restaurant.image}
+          title={restaurant.name}
+          rating={restaurant.rating}
+          genre="Offers"
+          address={restaurant.address}
+          short_description={restaurant.short_description}
+          dishes={restaurant.dishes}
+          long={restaurant.long}
+          lat={restaurant.lat}
         />
-        <RestaurendCard
-          id={123}
-          imgUrl="https://img.freepik.com/free-photo/top-view-sushi-set-with-soy-sauce-chopsticks-wooden-serving-board_176474-3466.jpg?w=996&t=st=1669291448~exp=1669292048~hmac=00986c6248065fe57b4a2d0184045c3e452167854551009e2edfc085bd4bb017"
-          title="lorem"
-          rating={4.5}
-          genre="tunisian"
-          address="123 Main St"
-          short_description="This is a | description"
-          dishes={[]}
-          long={20}
-          lat={0}
-        />
-        <RestaurendCard
-          id={123}
-          imgUrl="https://img.freepik.com/free-photo/top-view-sushi-set-with-soy-sauce-chopsticks-wooden-serving-board_176474-3466.jpg?w=996&t=st=1669291448~exp=1669292048~hmac=00986c6248065fe57b4a2d0184045c3e452167854551009e2edfc085bd4bb017"
-          title="lorem"
-          rating={4.5}
-          genre="tunisian"
-          address="123 Main St"
-          short_description="This is a | description"
-          dishes={[]}
-          long={20}
-          lat={0}
-        />
+        ))}
+       
       </ScrollView>
     </View>
   );
